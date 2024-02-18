@@ -72,12 +72,13 @@ app.get("/transactions", async (req, res) => {
             month = "March",
             page = 1,
             perPage = 10,
-            search = "electronics",
+            search = "",
         } = req.query;
         const offset = (page - 1) * perPage;
         const limit = perPage;
 
         let query = `SELECT * FROM transactions`;
+
         const monthMap = {
             January: "01",
             February: "02",
@@ -106,6 +107,7 @@ app.get("/transactions", async (req, res) => {
         query += ` LIMIT ${limit} OFFSET ${offset}`;
 
         const rows = await database.all(query);
+        console.log(rows);
         res.send(rows);
     } catch (error) {
         console.error("Error fetching transactions:", error);
@@ -243,7 +245,7 @@ app.get("/pieChart", async (req, res) => {
     try {
         const { month = "March" } = req.query;
         const categoriesData = await getCategoryDataForMonth(month);
-        console.log(categoriesData);
+
         res.json(categoriesData);
     } catch (error) {
         console.error("Error fetching data for pie chart:", error);
